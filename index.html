@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio - Ilhomjon</title>
+
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+
+    :root{
+      --bg:#070b13;
+      --text:#e9eef7;
+      --muted:#95a3b7;
+      --cyan:#17e9ff;
+      --cyan2:#00c6ff;
+      --border:rgba(255,255,255,0.12);
+    }
+
+    body{
+      background:var(--bg);
+      color:var(--text);
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      overflow-x:hidden;
+    }
+
+    /* BG Canvas */
+    #stars{
+      position:fixed;
+      inset:0;
+      z-index:-1;
+    }
+
+    /* Container */
+    .container{
+      padding:50px 70px;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .header{
+      height:72px;
+      padding:0 70px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      position:sticky;
+      top:0;
+      z-index:5;
+      backdrop-filter: blur(10px);
+      background: rgba(7,11,19,0.55);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .logo{
+      font-weight:800;
+      color:var(--cyan);
+      letter-spacing:0.2px;
+    }
+
+    .nav{
+      display:flex;
+      gap:28px;
+      align-items:center;
+    }
+
+    .nav a{
+      color:var(--muted);
+      text-decoration:none;
+      transition:0.2s;
+      font-size:15px;
+    }
+    .nav a:hover{color:var(--text)}
+
+    .theme-btn{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,0.06);
+      color:var(--text);
+      width:38px;height:38px;
+      border-radius:10px;
+      cursor:pointer;
+      transition:0.2s;
+    }
+    .theme-btn:hover{transform:translateY(-1px)}
+
+    /* ===== HERO ===== */
+    .hero{
+      display:grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap:40px;
+      align-items:center;
+      min-height: calc(100vh - 72px);
+      padding-top: 10px;
+    }
+
+    .title{
+      font-size:68px;
+      line-height:1;
+      margin-bottom:18px;
+      letter-spacing:-1px;
+    }
+    .title span{color:var(--cyan)}
+
+    .subtitle{
+      font-size:18px;
+      color:#b9c6da;
+      margin-bottom:20px;
+    }
+
+    .desc{
+      max-width:560px;
+      color:var(--muted);
+      line-height:1.7;
+      font-size:15.5px;
+      margin-bottom:26px;
+    }
+
+    .buttons{display:flex;gap:14px;margin-bottom:22px;flex-wrap:wrap}
+
+    .btn{
+      padding:12px 18px;
+      border-radius:12px;
+      font-weight:700;
+      font-size:14.5px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      transition:0.2s;
+    }
+
+    .btn.primary{
+      background:linear-gradient(90deg,var(--cyan),var(--cyan2));
+      color:#051017;
+      box-shadow:0 10px 30px rgba(0,198,255,0.15);
+    }
+    .btn.primary:hover{transform:translateY(-2px)}
+    .btn.ghost{
+      border:1px solid var(--border);
+      color:var(--text);
+      background:rgba(255,255,255,0.04);
+    }
+    .btn.ghost:hover{transform:translateY(-2px)}
+
+    .socials{display:flex;gap:14px;color:var(--muted);flex-wrap:wrap}
+    .socials a{
+      width:34px;height:34px;
+      border-radius:10px;
+      display:flex;align-items:center;justify-content:center;
+      text-decoration:none;
+      color:var(--muted);
+      border:1px solid rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.03);
+      transition:0.2s;
+    }
+    .socials a:hover{
+      color:var(--text);
+      border-color:rgba(23,233,255,0.35);
+    }
+
+    /* Profile card */
+    .hero-right{display:flex;justify-content:center}
+    .profile-card{
+      width:360px;height:360px;
+      border-radius:26px;
+      padding:16px;
+      background: radial-gradient(circle at 30% 20%, rgba(23,233,255,0.10), transparent 45%),
+                 rgba(255,255,255,0.04);
+      border:1px solid rgba(255,255,255,0.10);
+      backdrop-filter: blur(10px);
+      position:relative;
+      box-shadow:0 30px 70px rgba(0,0,0,0.45);
+    }
+    .profile-card img{
+      width:100%;height:100%;
+      border-radius:20px;
+      object-fit:cover;
+      border:1px solid rgba(255,255,255,0.10);
+    }
+
+    .badge{
+      position:absolute;
+      width:46px;height:46px;
+      border-radius:16px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:20px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(0,0,0,0.40);
+      backdrop-filter: blur(8px);
+    }
+    .lightning{left:8px;top:8px}
+    .lock{right:8px;bottom:8px}
+
+    .floating-btn{
+      position:absolute;
+      right:-18px;
+      top:50%;
+      transform:translateY(-50%);
+      width:46px;height:46px;
+      border-radius:18px;
+      border:1px solid rgba(23,233,255,0.35);
+      background:rgba(0,0,0,0.45);
+      color:var(--cyan);
+      cursor:pointer;
+      transition:0.2s;
+    }
+    .floating-btn:hover{transform:translateY(-50%) scale(1.05)}
+
+    /* Section titles */
+    .section-title{
+      font-size:44px;
+      font-weight:900;
+      margin-bottom:10px;
+      text-align:center;
+    }
+    .section-subtitle{
+      color:var(--muted);
+      font-size:14.5px;
+      margin-bottom:50px;
+      text-align:center;
+    }
+
+    /* ===== PROJECTS ===== */
+    .projects{padding:80px 0 40px}
+
+    .projects-grid{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap:22px;
+    }
+
+    .project-card{
+      text-align:left;
+      padding:22px;
+      border-radius:18px;
+      background:rgba(255,255,255,0.04);
+      border:1px solid rgba(255,255,255,0.10);
+      backdrop-filter: blur(10px);
+      box-shadow:0 25px 60px rgba(0,0,0,0.45);
+      transition:0.25s;
+    }
+    .project-card:hover{transform:translateY(-6px)}
+
+    .card-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      margin-bottom:12px;
+    }
+
+    .open-btn{
+      width:38px;height:38px;
+      border-radius:12px;
+      display:flex;align-items:center;justify-content:center;
+      text-decoration:none;
+      color:var(--text);
+      border:1px solid rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.05);
+      transition:0.2s;
+    }
+    .open-btn:hover{border-color:rgba(23,233,255,0.30)}
+
+    .project-name{font-size:20px;font-weight:900}
+    .project-type{font-size:12px;color:var(--muted);margin-left:10px}
+
+    .meta{
+      margin-top:6px;
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      color:#9fb0c7;
+      font-size:12.5px;
+    }
+    .active{color:#ffd36d}
+
+    .project-desc{
+      margin:14px 0 18px;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.7;
+    }
+
+    .tags{display:flex;gap:10px;flex-wrap:wrap}
+    .tags span{
+      font-size:12px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(0,0,0,0.25);
+      color:#cfd8e7;
+    }
+
+    .border-cyan{border:1px solid rgba(23,233,255,0.35)}
+    .border-green{border:1px solid rgba(46,255,167,0.25)}
+    .border-purple{border:1px solid rgba(168,85,247,0.28)}
+    .border-orange{border:1px solid rgba(255,166,0,0.25)}
+    .cyan{color:var(--cyan)}
+    .green{color:#2effa7}
+    .purple{color:#b675ff}
+    .orange{color:#ff9f1a}
+
+    /* ===== CONTACT ===== */
+    .contact{padding:90px 0 30px}
+
+    .contact-grid{
+      margin-top:45px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:26px;
+      align-items:start;
+    }
+
+    .contact-left{text-align:left}
+
+    .contact-mini-title{
+      color:var(--cyan);
+      font-size:16px;
+      font-weight:900;
+      margin-bottom:10px;
+    }
+
+    .contact-desc{
+      color:var(--muted);
+      line-height:1.7;
+      font-size:14.5px;
+      max-width:520px;
+      margin-bottom:24px;
+    }
+
+    .info-cards{display:flex;flex-direction:column;gap:14px;margin-bottom:26px}
+    .info-card{
+      display:flex;align-items:center;gap:14px;
+      padding:16px;
+      border-radius:18px;
+      background:rgba(255,255,255,0.04);
+      border:1px solid rgba(255,255,255,0.10);
+      backdrop-filter: blur(10px);
+      transition:0.2s;
+    }
+    .info-card:hover{
+      transform:translateY(-2px);
+      border-color:rgba(23,233,255,0.25);
+    }
+
+    .info-icon{
+      width:44px;height:44px;
+      border-radius:16px;
+      display:flex;align-items:center;justify-content:center;
+      background:rgba(0,0,0,0.30);
+      border:1px solid rgba(23,233,255,0.18);
+      color:var(--cyan);
+      font-size:18px;
+    }
+    .info-title{font-weight:900;font-size:14px;margin-bottom:4px}
+    .info-text{font-size:13px;color:var(--muted)}
+
+    .social-title{color:var(--cyan);font-weight:900;margin-bottom:14px}
+
+    .social-cards{display:flex;gap:14px;flex-wrap:wrap}
+    .social-card{
+      width:150px;
+      padding:14px 12px;
+      border-radius:18px;
+      text-decoration:none;
+      color:var(--text);
+      text-align:center;
+      background:rgba(255,255,255,0.04);
+      border:1px solid rgba(255,255,255,0.10);
+      transition:0.2s;
+    }
+    .social-card span{
+      display:block;
+      font-size:18px;
+      margin-bottom:6px;
+      color:var(--cyan);
+    }
+    .social-card p{font-size:13px;color:#c9d6ea}
+    .social-card:hover{
+      transform:translateY(-2px);
+      border-color:rgba(23,233,255,0.25);
+    }
+
+    .contact-right{
+      padding:22px;
+      border-radius:22px;
+      background:rgba(255,255,255,0.04);
+      border:1px solid rgba(255,255,255,0.10);
+      backdrop-filter: blur(10px);
+      box-shadow:0 25px 70px rgba(0,0,0,0.40);
+    }
+
+    .form-title{font-size:16px;font-weight:900;margin-bottom:16px}
+
+    .contact-form label{
+      font-size:12.5px;
+      color:#cbd7ea;
+      display:block;
+      margin-bottom:6px;
+    }
+
+    .form-row{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .form-group{margin-bottom:14px}
+
+    .contact-form input,
+    .contact-form textarea{
+      width:100%;
+      padding:12px 12px;
+      border-radius:12px;
+      outline:none;
+      border:1px solid rgba(255,255,255,0.10);
+      background:rgba(0,0,0,0.28);
+      color:var(--text);
+      font-size:14px;
+    }
+
+    .contact-form input:focus,
+    .contact-form textarea:focus{
+      border-color:rgba(23,233,255,0.35);
+    }
+
+    .send-btn{
+      width:100%;
+      padding:13px 16px;
+      border:none;
+      border-radius:12px;
+      font-weight:900;
+      cursor:pointer;
+      background:linear-gradient(90deg,var(--cyan),var(--cyan2));
+      color:#041019;
+      transition:0.2s;
+    }
+    .send-btn:hover{transform:translateY(-2px)}
+
+    .footer{
+      margin-top:40px;
+      text-align:center;
+      color:rgba(255,255,255,0.45);
+      font-size:12.5px;
+      padding-top:25px;
+      border-top:1px solid rgba(255,255,255,0.06);
+    }
+
+    /* ===== Mobile / Responsive ===== */
+    @media (max-width: 980px){
+      .header{padding:0 18px}
+      .container{padding:35px 18px}
+      .nav{gap:16px}
+      .nav a{font-size:14px}
+
+      .hero{grid-template-columns:1fr;min-height:auto;padding-top:22px}
+      .title{font-size:46px}
+      .profile-card{width:320px;height:320px}
+
+      .projects-grid{grid-template-columns:1fr}
+      .section-title{font-size:32px}
+
+      .contact-grid{grid-template-columns:1fr}
+      .form-row{grid-template-columns:1fr}
+      .social-card{width:100%}
+    }
+
+    @media (max-width: 420px){
+      .title{font-size:40px}
+      .profile-card{width:290px;height:290px}
+      .floating-btn{right:-14px}
+    }
+  </style>
+</head>
+
+<body>
+
+  <canvas id="stars"></canvas>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">Adhamjon Umarbayev</div>
+    <nav class="nav">
+      <a href="#about">Haqida</a>
+      <a href="#projects">Loyihalar</a>
+      <a href="#skills">Ko'nikmalar</a>
+      <a href="#contact">Aloqa</a>
+      <button class="theme-btn" id="themeBtn" title="Theme">🌙</button>
+    </nav>
+  </header>
+
+  <main class="container">
+
+    <!-- HERO -->
+    <section class="hero" id="about">
+      <div class="hero-left">
+        <h1 class="title">
+          Adhamjon <br />
+          <span>Umarbayev</span>
+        </h1>
+
+        <p class="subtitle">Frontend Developer</p>
+
+
+        <div class="buttons">
+          <a class="btn primary" href="#projects">Loyihalarni ko‘rish</a>
+          <a class="btn ghost" href="#contact">Aloqa qilish</a>
+        </div>
+
+        <div class="socials">
+          <a href="#" title="GitHub"></a>
+          <a href="#" title="LinkedIn">in</a>
+          <a href="#" title="Telegram">✈</a>
+          <a href="#" title="Email">✉</a>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="profile-card">
+          <div class="badge lightning">⚡</div>
+
+          <!-- Rasming nomi: profile.jpg -->
+          <img src="profile.jpg" alt="Profile" />
+
+          <div class="badge lock">🔒</div>
+          <button class="floating-btn" title="Start">🚀</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section class="projects" id="projects">
+      <h2 class="section-title">Mening loyihalarim</h2>
+      <p class="section-subtitle">
+        Professional darajada yaratilgan va hozirda faol ishlab turgan loyihalar
+      </p>
+
+      <div class="projects-grid">
+
+        <div class="project-card border-cyan">
+          <div class="card-top">
+            <div>
+              <h3 class="project-name cyan">sptu28<span class="project-type"></span></h3>
+              <div class="meta">
+                <span>👥 100+ users</span>
+                <span>2025</span>
+                <span class="active">⭐ Active</span>
+              </div>
+            </div>
+            <a class="open-btn" href="#" target="_blank" title="Open">↗</a>
+          </div>
+        </div>
+
+        <div class="project-card border-green">
+          <div class="card-top">
+            <div>
+              <h3 class="project-name green">turtkul-texnikum2<span class="project-type"></span></h3>
+              <div class="meta">
+                <span>👥 200+ users</span>
+                <span>2025</span>
+                <span class="active">⭐ Active</span>
+              </div>
+            </div>
+            <a class="open-btn" href="#" target="_blank" title="Open">↗</a>
+          </div>
+        </div>
+
+        <!-- <div class="project-card border-purple">
+          <div class="card-top">
+            <div>
+              <h3 class="project-name purple">ClassMaster <span class="project-type">Education Management</span></h3>
+              <div class="meta">
+                <span>👥 300+ users</span>
+                <span>📅 2024</span>
+                <span class="active">⭐ Active</span>
+              </div>
+            </div>
+            <a class="open-btn" href="#" target="_blank" title="Open">↗</a>
+          </div>
+
+          <p class="project-desc">
+            Sinf xonalari va dars jadvalini boshqarish uchun professional tizim.
+            Optimal resurs taqsimoti va jadval boshqaruvi.
+          </p>
+
+          <div class="tags">
+            <span>Next.js</span><span>MongoDB</span><span>Express</span><span>TypeScript</span><span>Socket.io</span>
+          </div>
+        </div>
+
+        <div class="project-card border-orange">
+          <div class="card-top">
+            <div>
+              <h3 class="project-name orange">Finex EDU <span class="project-type">Financial Management</span></h3>
+              <div class="meta">
+                <span>👥 200+ users</span>
+                <span>📅 2024</span>
+                <span class="active">⭐ Active</span>
+              </div>
+            </div>
+            <a class="open-btn" href="#" target="_blank" title="Open">↗</a>
+          </div>
+
+          <p class="project-desc">
+            Ta'lim sohasida moliyaviy boshqaruv va hisobot tizimi. To'lov nazorati,
+            byudjet rejalashtirish va moliyaviy tahlil.
+          </p>
+
+          <div class="tags">
+            <span>Next.js</span><span>PostgreSQL</span><span>Express</span><span>React</span><span>Chart.js</span>
+          </div>
+        </div>
+
+      </div> -->
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact" id="contact">
+      <h2 class="section-title">Aloqa qiling</h2>
+
+      <div class="contact-grid">
+        <div class="contact-left">
+          <h3 class="contact-mini-title">Men bilan bog'laning</h3>
+          <p class="contact-desc">
+            Yangi loyiha bo'yicha hamkorlik qilish yoki savol-javob uchun
+            menga murojaat qiling. Men har doim professional yechimlar taklif
+            qilishga tayyorman.
+          </p>
+
+          <div class="info-cards">
+            <div class="info-card">
+              <div class="info-icon">✉</div>
+              <div>
+                <p class="info-title">Email</p>
+                <p class="info-text">adhamumarbayev400@gmail.com</p>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <div class="info-icon">📞</div>
+              <div>
+                <p class="info-title">Telefon</p>
+                <p class="info-text">+998 88 561 31 11</p>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <div class="info-icon">📍</div>
+              <div>
+                <p class="info-title">Joylashuv</p>
+                <p class="info-text">Toshkent, O'zbekiston</p>
+              </div>
+            </div>
+          </div>
+
+          <h4 class="social-title">Ijtimoiy tarmoqlar</h4>
+          <div class="social-cards">
+            <a href="#" class="social-card" target="_blank"><span></span><p>GitHub</p></a>
+            <a href="#" class="social-card" target="_blank"><span>in</span><p>LinkedIn</p></a>
+            <a href="#" class="social-card" target="_blank"><span>✈</span><p>Telegram</p></a>
+          </div>
+        </div>
+
+        <div class="contact-right">
+          <h3 class="form-title">Xabar yuborish</h3>
+          <form class="contact-form" id="contactForm">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Ism</label>
+                <input type="text" id="name" placeholder="Ismingiz..." required />
+              </div>
+              <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="email" placeholder="Email..." required />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Mavzu</label>
+              <input type="text" id="subject" placeholder="Mavzu..." required />
+            </div>
+
+            <div class="form-group">
+              <label>Xabar</label>
+              <textarea id="message" placeholder="Xabaringiz..." rows="5" required></textarea>
+            </div>
+
+            <button type="submit" class="send-btn">✈ Xabar yuborish</button>
+          </form>
+        </div>
+      </div>
+
+      <footer class="footer">
+        © 2025 Adhamjon Umarbayev. Barcha huquqlar himoyalangan.
+      </footer>
+    </section>
+
+  </main>
+
+  <script>
+    // ===== Stars background =====
+    const canvas = document.getElementById("stars");
+    const ctx = canvas.getContext("2d");
+    let W, H;
+
+    function resize(){
+      W = canvas.width = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+    window.addEventListener("resize", resize);
+    resize();
+
+    const stars = [];
+    const STAR_COUNT = Math.min(120, Math.floor((W * H) / 12000));
+
+    for(let i=0;i<STAR_COUNT;i++){
+      stars.push({
+        x: Math.random()*W,
+        y: Math.random()*H,
+        r: Math.random()*2 + 0.5,
+        vx: (Math.random()-0.5)*0.35,
+        vy: (Math.random()-0.5)*0.35
+      });
+    }
+
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+
+      const g = ctx.createRadialGradient(W*0.35, H*0.35, 50, W*0.35, H*0.35, W);
+      g.addColorStop(0, "rgba(0,198,255,0.06)");
+      g.addColorStop(1, "rgba(0,0,0,0.0)");
+      ctx.fillStyle = g;
+      ctx.fillRect(0,0,W,H);
+
+      for(const s of stars){
+        s.x += s.vx; s.y += s.vy;
+        if(s.x<0) s.x=W;
+        if(s.x>W) s.x=0;
+        if(s.y<0) s.y=H;
+        if(s.y>H) s.y=0;
+
+        ctx.beginPath();
+        ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+        ctx.fillStyle="rgba(23,233,255,0.75)";
+        ctx.fill();
+      }
+
+      for(let i=0;i<stars.length;i++){
+        for(let j=i+1;j<stars.length;j++){
+          const a=stars[i], b=stars[j];
+          const dx=a.x-b.x, dy=a.y-b.y;
+          const dist=Math.sqrt(dx*dx+dy*dy);
+          if(dist < 130){
+            ctx.beginPath();
+            ctx.moveTo(a.x,a.y);
+            ctx.lineTo(b.x,b.y);
+            ctx.strokeStyle = `rgba(23,233,255,${(1 - dist/130)*0.18})`;
+            ctx.lineWidth=1;
+            ctx.stroke();
+          }
+        }
+      }
+
+      requestAnimationFrame(draw);
+    }
+    draw();
+
+    // ===== Theme switch =====
+    const themeBtn = document.getElementById("themeBtn");
+    let dark = true;
+
+    themeBtn.addEventListener("click", () => {
+      dark = !dark;
+      document.documentElement.style.setProperty("--bg", dark ? "#070b13" : "#f7fbff");
+      document.documentElement.style.setProperty("--text", dark ? "#e9eef7" : "#07131e");
+      document.documentElement.style.setProperty("--muted", dark ? "#95a3b7" : "#3f556c");
+      themeBtn.textContent = dark ? "🌙" : "☀️";
+    });
+
+    // ===== Form demo submit =====
+    document.getElementById("contactForm").addEventListener("submit",(e)=>{
+      e.preventDefault();
+      alert("Xabar yuborildi ✅ (Hozircha demo). Telegram/Email ulab berishim mumkin.");
+      e.target.reset();
+    });
+  </script>
+</body>
+</html>
